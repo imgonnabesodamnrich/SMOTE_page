@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paper Note: Feature-level SMOTE for Gas Turbine Diagnosis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown.min.css">
+    
+    <script>
+        MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body { margin: 0; padding: 0; display: flex; min-height: 100vh; background-color: #fff; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; }
+        .sidebar { width: 280px; background-color: #f6f8fa; border-right: 1px solid #d0d7de; position: fixed; height: 100vh; overflow-y: auto; padding: 24px; box-sizing: border-box; top: 0; left: 0; z-index: 100; }
+        .sidebar h2 { font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #24292f; }
+        .sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .sidebar li { margin-bottom: 8px; }
+        .sidebar a { text-decoration: none; color: #57606a; font-size: 14px; display: block; padding: 4px 0; transition: color 0.2s; }
+        .sidebar a:hover { color: #0969da; text-decoration: underline; }
+        .sidebar .sub-menu { margin-left: 20px; margin-top: 4px; font-size: 13px; }
+        .main-content { margin-left: 280px; flex: 1; padding: 40px 60px; max-width: 1000px; }
+        html { scroll-behavior: smooth; }
+        div[align="center"] { text-align: center; margin: 20px 0; }
+        @media (max-width: 900px) {
+            body { display: block; }
+            .sidebar { position: relative; width: 100%; height: auto; border-right: none; border-bottom: 1px solid #d0d7de; }
+            .main-content { margin-left: 0; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <h2>Contents</h2>
+        <ul>
+            <li><a href="#1-background">1. Background</a></li>
+            <li>
+                <a href="#2-methodology">2. Methodology: Feature-level SMOTE</a>
+                <ul class="sub-menu">
+                    <li><a href="#21-space-mapping">2.1 Space Mapping</a></li>
+                    <li><a href="#22-feature-level-augmentation">2.2 Feature-level Augmentation</a></li>
+                    <li><a href="#23-classification">2.3 Fault Classification</a></li>
+                </ul>
+            </li>
+            <li><a href="#3-validation">3. Experimental Validation</a></li>
+            <li><a href="#4-conclusion">4. Conclusion</a></li>
+            <li><a href="#literature-source">Literature Source</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content markdown-body">
+        
+        <h1>Paper Note: Augmenting Fault Samples in Learnable Feature Space (Feature-level SMOTE)</h1>
+
+        <blockquote>
+            <p>Addressing high overlap and class imbalance in fault diagnosis of gas turbines.</p>
+            <p><strong>Paper Title:</strong> Feature-level SMOTE: Augmenting fault samples in learnable feature space for imbalanced fault diagnosis of gas turbines</p>
+            <p><strong>Journal:</strong> <em>Expert Systems With Applications</em> (Elsevier), Vol. 238, 2024</p>
+            <p><strong>DOI:</strong> <a href="https://doi.org/10.1016/j.eswa.2023.122023">10.1016/j.eswa.2023.122023</a></p>
+        </blockquote>
+
+        <p>
+            <a href="https://doi.org/10.1016/j.eswa.2023.122023"><img src="https://img.shields.io/badge/DOI-10.1016%2Fj.eswa.2023.122023-blue" alt="DOI"></a>
+            <img src="https://img.shields.io/badge/Status-Published-green" alt="Status">
+            <img src="https://img.shields.io/badge/Topic-Imbalanced%20Learning-orange" alt="Topic">
+        </p>
+
+        <hr>
+
+        <h2 id="1-background">1. Background</h2>
+        <p>Training deep learning models for fault diagnosis in gas turbines faces two main challenges:</p>
+        <ol>
+            <li><strong>Class Imbalance</strong>: Normal samples far outnumber fault samples in real operations.</li>
+            <li><strong>Inter-class Overlap</strong>: Early fault characteristics are highly similar to normal states in the raw data space.</li>
+        </ol>
+        <p>Conventional methods like SMOTE generate synthetic samples in the raw space, which often creates noise in overlapping regions. This paper proposes <strong>Feature-level SMOTE</strong>: mapping data to a discriminative feature space before performing augmentation.</p>
+
+        <div align="center">
+          <img width="70%" src="https://github.com/user-attachments/assets/15b46f8f-5b6a-409b-baaa-1c8bc9bf8f6d" />
+          <p><em>Fig 1. Sample distributions in raw vs. learnable feature space.</em></p>
+        </div>
+
+        <h2 id="2-methodology">2. Methodology: Feature-level SMOTE</h2>
+        <p>The framework consists of three steps: Space Mapping, Feature-level Augmentation, and Classification.</p>
+
+        <h3 id="21-space-mapping">2.1 Space Mapping</h3>
+        <div align="center">
+          <img width="70%" src="https://github.com/user-attachments/assets/0930b017-d250-4149-a952-98fcc3ec5933" />
+          <p><em>Fig 2. Architecture of Deep Siamese Multi-head Self-attention Network (DSMHSA).</em></p>
+        </div>
+        <p>To solve overlap, <strong>DSMHSA</strong> is used as the feature extractor:</p>
+        <ul>
+            <li><strong>Network</strong>: Transformer-based multi-head self-attention for capturing long-range dependencies in time series.</li>
+            <li><strong>Strategy</strong>: Siamese structure with contrastive loss to pull same-class samples closer and push different classes apart.</li>
+        </ul>
+
+        <h3 id="22-feature-level-augmentation">2.2 Feature-level Augmentation</h3>
+        <p>Once a discriminative space is obtained, <strong>SMOTE</strong> is applied to the latent features:</p>
+        <ul>
+            <li><strong>Operation</strong>: Performed on latent feature representations instead of raw signals.</li>
+            <li><strong>Advantage</strong>: Larger "Safe Regions" in the feature space ensure high-quality synthetic samples without generating noise in overlapping zones.</li>
+        </ul>
+
+        <h3 id="23-classification">2.3 Fault Classification</h3>
+        <p>The balanced feature set is then fed into a Softmax Classifier (SMC) for final fault diagnosis.</p>
+
+        <h2 id="3-validation">3. Experimental Validation</h2>
+        <div align="center">
+          <img width="70%" src="https://github.com/user-attachments/assets/1001bba4-ffe1-4634-ac33-19a9783c7cb5" />
+          <p><em>Fig 3. Performance data collection and sample construction.</em></p>
+        </div>
+        <p>Tested on a real dataset from an Asian airline and a public robot failure dataset:</p>
+        <ul>
+            <li><strong>Performance</strong>: Achieved a Balanced Accuracy of <strong>90.38%</strong> on the gas turbine dataset.</li>
+            <li><strong>Comparison</strong>: Outperformed 7 mainstream methods including standard SMOTE and ADASYN.</li>
+            <li><strong>Visualization</strong>: t-SNE confirms that the "Separate before Augment" strategy effectively isolates healthy and faulty samples.</li>
+        </ul>
+
+        <h2 id="4-conclusion">4. Conclusion</h2>
+        <p>Feature-level SMOTE highlights the necessity of feature space optimization before data augmentation, providing a robust solution for imbalanced industrial data.</p>
+
+        <hr>
+        <h2 id="literature-source">Literature Source</h2>
+        <p><strong>Paper Title:</strong> Feature-level SMOTE: Augmenting fault samples in learnable feature space for imbalanced fault diagnosis of gas turbines</p>
+        <p><strong>Journal:</strong> <em>Expert Systems With Applications</em> (Elsevier), Vol. 238, 2024</p>
+        <p><strong>DOI:</strong> <a href="https://doi.org/10.1016/j.eswa.2023.122023">10.1016/j.eswa.2023.122023</a></p>
+
+    </main>
+
+</body>
+</html>
